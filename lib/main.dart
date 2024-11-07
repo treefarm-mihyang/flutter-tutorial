@@ -1,20 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:toonflix/screens/home_screen.dart';
-
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..userAgent =
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36';
-  }
-}
+import 'package:toonflix/widgets/PopupMenuWidget.dart';
+import 'package:toonflix/widgets/checkboxes.dart';
+import 'package:toonflix/widgets/radios.dart';
+import 'package:toonflix/widgets/sliderWidget.dart';
+import 'package:toonflix/widgets/switchWidget.dart';
 
 void main() async {
-  HttpOverrides.global = MyHttpOverrides();
-
   runApp(const App());
 }
 
@@ -24,7 +15,33 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("Flutter Inputs"),
+        ),
+        body: Body(),
+      ),
+    );
+  }
+}
+
+class Body extends StatelessWidget {
+  Body({super.key});
+
+  List<bool> values = [false, false, false];
+
+  onChanged() {}
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      children: [
+        Checkboxes(),
+        Radios(),
+        SliderWidget(),
+        SwitchWidget(),
+        PopupMenuWidget(),
+      ],
     );
   }
 }
