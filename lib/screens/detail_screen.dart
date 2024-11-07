@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toonflix/models/Episode_model.dart';
 import 'package:toonflix/models/webtoon_detail_model.dart';
 import 'package:toonflix/models/webtoon_model.dart';
 import 'package:toonflix/services/api_service.dart';
+import 'package:toonflix/widgets/episode.dart';
 import 'package:toonflix/widgets/image_card.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DetailScreen extends StatefulWidget {
   final WebtoonModel webtoon;
@@ -20,12 +24,44 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   late Future<WebtoonDetailModel> webtoon;
   late Future<List<EpisodeModel>> episodes;
+  late SharedPreferences prefs;
+  bool isLike = false;
+
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    final likeToons = prefs.getStringList('likedToons');
+    if (likeToons != null) {
+      if (likeToons.contains(widget.webtoon.id)) {
+        setState(() {
+          isLike = true;
+        });
+      }
+    } else {
+      prefs.setStringList('likedToons', []);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     webtoon = ApiService.getToonById(widget.webtoon.id);
     episodes = ApiService.getEpisodesById(widget.webtoon.id);
+    initPrefs();
+  }
+
+  onLikeToggle() async {
+    final likedToons = prefs.getStringList("likedToons");
+    if (likedToons != null) {
+      if (isLike) {
+        likedToons.remove(widget.webtoon.id);
+      } else {
+        likedToons.add(widget.webtoon.id);
+      }
+      await prefs.setStringList('likedToons', likedToons);
+      setState(() {
+        isLike = !isLike;
+      });
+    }
   }
 
   @override
@@ -39,6 +75,11 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.green,
+        actions: [
+          IconButton(
+              onPressed: onLikeToggle,
+              icon: Icon(isLike ? Icons.favorite : Icons.favorite_outline))
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -100,46 +141,9 @@ class _DetailScreenState extends State<DetailScreen> {
                     return Column(
                       children: [
                         for (var episode in snapshot.data!)
-                          Container(
-                            margin: const EdgeInsets.only(
-                              bottom: 8,
-                            ),
-                            decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(40),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 4,
-                                    offset: const Offset(4, 4),
-                                    color: Colors.black.withOpacity(0.1),
-                                  ),
-                                ]),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: 20,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    episode.title,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  const Icon(
-                                    Icons.chevron_right,
-                                    color: Colors.white,
-                                    size: 28,
-                                  ),
-                                ],
-                              ),
-                            ),
+                          Episode(
+                            episode: episode,
+                            webtoonId: widget.webtoon.id,
                           ),
                       ],
                     );
