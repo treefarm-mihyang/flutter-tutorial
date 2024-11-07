@@ -21,11 +21,15 @@ class Webtoon extends StatelessWidget {
             builder: (context) => DetailScreen(
               webtoon: webtoon,
             ),
-            fullscreenDialog: true,
           ),
         );
       },
-      child: ImageCard(webtoon: webtoon),
+      child: Hero(
+        tag: webtoon.id,
+        child: ImageCard(
+          webtoon: webtoon,
+        ),
+      ),
     );
   }
 }
