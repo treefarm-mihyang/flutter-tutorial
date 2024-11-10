@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toonflix/screen/new_page2.dart';
+import 'package:go_router/go_router.dart';
 
 class NewPage extends StatelessWidget {
   const NewPage({super.key});
@@ -15,20 +15,13 @@ class NewPage extends StatelessWidget {
         children: [
           Center(
             child: TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => context.pop(),
               child: const Text("Go to Back"),
             ),
           ),
           Center(
             child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NewPage2()),
-                );
-              },
+              onPressed: () => context.pushNamed('new2'),
               child: const Text("Go to Newpage2"),
             ),
           ),
