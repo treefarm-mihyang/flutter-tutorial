@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-final customTheme = ThemeData(
+final theme = ThemeData(
   colorScheme: ColorScheme.fromSeed(
     seedColor: Colors.green,
   ),

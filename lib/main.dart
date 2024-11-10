@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:toonflix/screen/new_page.dart';
-import 'package:toonflix/screen/new_page2.dart';
+
+import 'package:toonflix/router/router.dart';
 import 'package:toonflix/style/theme.dart';
 
 void main() async {
@@ -14,27 +14,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: GoRouter(
-        initialLocation: '/',
-        routes: [
-          GoRoute(
-            path: '/',
-            name: 'home',
-            builder: (context, state) => HomeWidget(),
-          ),
-          GoRoute(
-            path: '/new',
-            name: 'new',
-            builder: (context, state) => const NewPage(),
-          ),
-          GoRoute(
-            path: '/new2',
-            name: 'new2',
-            builder: (context, state) => const NewPage2(),
-          )
-        ],
-      ),
-      theme: customTheme,
+      routerConfig: router,
+      theme: theme,
     );
   }
 }
@@ -44,7 +25,7 @@ class HomeWidget extends StatelessWidget {
     super.key,
   });
 
-  final textTheme = customTheme.textTheme;
+  final textTheme = theme.textTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +35,7 @@ class HomeWidget extends StatelessWidget {
       ),
       body: Center(
         child: TextButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const NewPage()),
-            );
-          },
+          onPressed: () => context.pushNamed('new'),
           child: const Text('Go to Page'),
         ),
       ),
