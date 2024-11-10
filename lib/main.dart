@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:toonflix/game/game_body.dart';
 
 void main() async {
   runApp(const App());
@@ -14,6 +15,7 @@ class App extends StatelessWidget {
         appBar: AppBar(
           title: const Text("가위 바위 보"),
         ),
+        body: const GameBody(),
       ),
     );
   }
