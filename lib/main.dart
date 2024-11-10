@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:toonflix/screen/new_page.dart';
 import 'package:toonflix/screen/new_page2.dart';
+import 'package:toonflix/style/theme.dart';
 
 void main() async {
   runApp(const App());
@@ -19,7 +20,7 @@ class App extends StatelessWidget {
           GoRoute(
             path: '/',
             name: 'home',
-            builder: (context, state) => const HomeWidget(),
+            builder: (context, state) => HomeWidget(),
           ),
           GoRoute(
             path: '/new',
@@ -33,14 +34,17 @@ class App extends StatelessWidget {
           )
         ],
       ),
+      theme: customTheme,
     );
   }
 }
 
 class HomeWidget extends StatelessWidget {
-  const HomeWidget({
+  HomeWidget({
     super.key,
   });
+
+  final textTheme = customTheme.textTheme;
 
   @override
   Widget build(BuildContext context) {
