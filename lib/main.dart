@@ -1,57 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:toonflix/screen/new_page.dart';
 
 void main() async {
   runApp(const App());
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({super.key});
 
   @override
-  State<App> createState() => _AppState();
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: HomeWidget(),
+    );
+  }
 }
 
-class _AppState extends State<App> {
-  late int index;
-
-  @override
-  void initState() {
-    super.initState();
-    index = 0;
-  }
+class HomeWidget extends StatelessWidget {
+  const HomeWidget({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Flutter Router"),
-        ),
-        body: homeBody(),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home)),
-            BottomNavigationBarItem(icon: Icon(Icons.search)),
-            BottomNavigationBarItem(icon: Icon(Icons.person)),
-          ],
-          currentIndex: index,
-          onTap: (value) => setState(() {
-            index = value;
-          }),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Flutter Router 2"),
+      ),
+      body: Center(
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const NewPage()),
+            );
+          },
+          child: const Text("Go to Page"),
         ),
       ),
     );
-  }
-
-  Widget homeBody() {
-    switch (index) {
-      case 1:
-        return const Center(child: Icon(Icons.search));
-      case 2:
-        return const Center(child: Icon(Icons.person));
-      case 0:
-      default:
-        return const Center(child: Icon(Icons.home));
-    }
   }
 }
